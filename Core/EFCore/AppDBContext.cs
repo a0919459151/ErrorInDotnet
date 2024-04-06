@@ -1,5 +1,7 @@
-﻿using Core.EFCore.DBEntities;
+﻿using Core.EFCore.BaseEntities;
+using Core.EFCore.DBEntities;
 using Microsoft.EntityFrameworkCore;
+using System.Linq.Expressions;
 
 namespace Core.EFCore;
 
@@ -16,5 +18,27 @@ public class AppDbContext : DbContext
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {
         base.OnModelCreating(modelBuilder);
+
+        // Soft delete query filter
+        ApplySoftDeleteQueryFilters(modelBuilder);
+    }
+
+    private void ApplySoftDeleteQueryFilters(ModelBuilder modelBuilder)
+    {
+        const string softDeletePropertyName = "DeletedAt";
+
+        foreach (var entityType in modelBuilder.Model.GetEntityTypes())
+        {
+            if (typeof(BaseEntity).IsAssignableFrom(entityType.ClrType))
+            {
+                var parameter = Expression.Parameter(entityType.ClrType, "e");
+                var propertyMethodInfo = typeof(EF).GetMethod(nameof(EF.Property))!.MakeGenericMethod(typeof(DateTime?));
+                var isDeletedProperty = Expression.Call(propertyMethodInfo, parameter, Expression.Constant(softDeletePropertyName));
+                BinaryExpression compareExpression = Expression.MakeBinary(ExpressionType.Equal, isDeletedProperty, Expression.Constant(null));
+                var lambda = Expression.Lambda(compareExpression, parameter);
+
+                modelBuilder.Entity(entityType.ClrType).HasQueryFilter(lambda);
+            }
+        }
     }
 }

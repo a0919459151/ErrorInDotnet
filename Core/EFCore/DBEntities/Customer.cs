@@ -1,11 +1,11 @@
-﻿using Core.EFCore.Common;
+﻿using Core.EFCore.BaseEntities;
 using Microsoft.EntityFrameworkCore;
 using System.ComponentModel.DataAnnotations;
 
 namespace Core.EFCore.DBEntities;
 
 [Comment("前台使用者")]
-public class Customer : FullUpdatableEntity
+public class Customer : BaseEntity
 {
     [StringLength(100)]
     [Comment("名稱")]

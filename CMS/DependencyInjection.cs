@@ -1,4 +1,5 @@
 ﻿using Core.EFCore;
+using Microsoft.AspNetCore.Authentication.Cookies;
 using Microsoft.EntityFrameworkCore;
 using System.Reflection;
 
@@ -6,6 +7,18 @@ namespace Microsoft.Extensions.DependencyInjection;
 
 public static class DependencyInjection
 {
+    // Add cookie authentication
+    public static void AddCookieAuthentication(this IServiceCollection services)
+    {
+        services
+            .AddAuthentication(CookieAuthenticationDefaults.AuthenticationScheme)
+            .AddCookie(CookieAuthenticationDefaults.AuthenticationScheme, options =>
+            {
+                options.LoginPath = "/Auth/Login";
+                options.AccessDeniedPath = "/Home/AccessDeny";
+            });
+    }
+
     // Add dbconext
     public static void AddDbContext(this IServiceCollection services, IConfiguration configuration)
     {

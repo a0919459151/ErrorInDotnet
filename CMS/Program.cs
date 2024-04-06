@@ -1,16 +1,14 @@
-
-
 var builder = WebApplication.CreateBuilder(args);
 
 builder.Services.AddControllersWithViews();
-
+builder.Services.AddCookieAuthentication();
 builder.Services.AddDbContext(builder.Configuration);
-
 builder.Services.AddServices();
 
 var app = builder.Build();
 
-if (!app.Environment.IsDevelopment())
+if (!app.Environment.IsDevelopment()
+    || !app.Environment.IsEnvironment("Local"))
 {
     app.UseExceptionHandler("/Home/Error");
     app.UseHsts();

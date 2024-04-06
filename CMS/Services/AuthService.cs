@@ -19,7 +19,10 @@ public class AuthService : IAuthService
     {
         Result result = new();
 
-        await Task.CompletedTask;
+        var admin = await _context.Admins
+            .AsNoTracking()
+            .Where(a => a.Account == model.Account)
+            .FirstOrDefaultAsync();
 
         return result.Success();
     }
