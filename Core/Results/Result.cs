@@ -1,6 +1,4 @@
-﻿using System.Net;
-
-namespace Core.Results;
+﻿namespace Core.Results;
 
 public class Result
 {
@@ -8,8 +6,8 @@ public class Result
 
     public int Code { get; set; }
 
-    public string Message { get; set; }
-}
+    public string Message { get; set; } = null!;
+}   
 
 public class Result<T> : Result
 {

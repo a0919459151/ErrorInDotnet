@@ -2,5 +2,4 @@
 global using Core.Helpers;
 global using Core.Extensions;
 global using Core.EFCore;
-global using Core.EFCore.BaseEntities;
 global using Core.EFCore.DBEntities;

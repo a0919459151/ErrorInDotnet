@@ -15,8 +15,7 @@ public static class ExceptionHandler
         response.ContentType = "application/json";
         response.StatusCode = (int)HttpStatusCode.BadRequest;
         
-        var result = new Result()
-            .BadRequest(exception.Message);
+        var result = new Result().BadRequest(exception.Message);
 
         await response.WriteAsync(JsonSerializer.Serialize(result));
     }
@@ -29,8 +28,7 @@ public static class ExceptionHandler
         response.ContentType = "application/json";
         response.StatusCode = (int)HttpStatusCode.InternalServerError;
 
-        var result = new Result()
-            .ServerError(exception.Message);
+        var result = new Result().ServerError(exception.Message);
 
         await response.WriteAsync(JsonSerializer.Serialize(result));
     }

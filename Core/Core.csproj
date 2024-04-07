@@ -8,12 +8,19 @@
 
 	<!-- Common package -->
 	<ItemGroup>
+		<PackageReference Include="MailKit" Version="4.4.0" />
+		<PackageReference Include="Microsoft.AspNetCore.Authentication.Cookies" Version="2.2.0" />
 		<PackageReference Include="Microsoft.AspNetCore.Cryptography.KeyDerivation" Version="8.0.3" />
 		<PackageReference Include="Microsoft.AspNetCore.Http.Abstractions" Version="2.2.0" />
+		<PackageReference Include="Microsoft.AspNetCore.Mvc.ViewFeatures" Version="2.2.0" />
 		<PackageReference Include="Microsoft.EntityFrameworkCore.SqlServer" Version="8.0.3" />
 	</ItemGroup>
 	<ItemGroup>
-	  <Folder Include="EFCore\Migrations\" />
+	  <Folder Include="Enums\" />
+	</ItemGroup>
+
+	<ItemGroup>
+		<EmbeddedResource Include="Resources\MailTemplates\ResetPasswordMailTemplate.html" />
 	</ItemGroup>
 
 </Project>

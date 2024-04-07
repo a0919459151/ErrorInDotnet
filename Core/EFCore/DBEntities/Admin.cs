@@ -18,4 +18,11 @@ public class Admin : BaseEntity
     [StringLength(100)]
     [Comment("密碼")]
     public string Password { get; set; } = null!;
+
+    [StringLength(100)]
+    [Comment("重設密碼權杖")]
+    public string? ResetPasswordToken { get; set; }
+
+    [Comment("重設密碼過期時間")]
+    public DateTime? ResetPasswordExpireTime { get; set; }
 }

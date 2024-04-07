@@ -1,0 +1,21 @@
+﻿@inject ToasterHelper Toaster;
+
+@{
+    var (isSuccess, message) = Toaster.GetModelValidatorResult();
+}
+
+@if (!string.IsNullOrEmpty(message))
+{
+    <script>
+        $(document).ready(function () {
+            var isSuccess = @Html.Raw(Json.Serialize(isSuccess));
+            var message = @Html.Raw(Json.Serialize(message));
+
+            if (isSuccess) {
+                alert(message);
+            } else {
+                alert(message);
+            }
+        });
+    </script>
+}

@@ -1,5 +1,4 @@
-﻿using Core.EFCore;
-using Microsoft.AspNetCore.Authentication.Cookies;
+﻿using Microsoft.AspNetCore.Authentication.Cookies;
 using Microsoft.EntityFrameworkCore;
 using System.Reflection;
 
@@ -28,6 +27,22 @@ public static class DependencyInjection
         {
             options.UseSqlServer(connectionString);
         });
+    }
+
+    // Add helpers
+    public static void AddHelpers(this IServiceCollection services)
+    {
+        services.AddSingleton<PasswordHasher>();
+        services.AddSingleton<AESEncrypter>();
+        services.AddSingleton<ToasterHelper>();
+        services.AddSingleton<MailSender>();
+        services.AddScoped<HttpContextService>();
+    }
+
+    // Add options
+    public static void AddOptions(this IServiceCollection services, IConfiguration configuration)
+    {
+        services.Configure<SMTPOption>(configuration.GetSection(SMTPOption.SMTP));
     }
 
     // Add services to the ioc container with reflaection

@@ -6,10 +6,10 @@ namespace Core.Helpers;
 /// <summary>
 /// PasswordHasher
 /// </summary>
-public static class PasswordHasher
+public class PasswordHasher
 {
     // Create a password hash
-    public static (string passwordHash, string passwordSalt) CreatePasswordHash(string password)
+    public (string passwordHash, string passwordSalt) CreatePasswordHash(string password)
     {
         // Generate a random salt
         byte[] salt = new byte[128 / 8];
@@ -30,7 +30,7 @@ public static class PasswordHasher
     }
 
     // Verify the password hash
-    public static bool VerifyPasswordHash(string password, string passwordHash, string passwordSalt)
+    public bool VerifyPasswordHash(string password, string passwordHash, string passwordSalt)
     {
         byte[] salt = Convert.FromBase64String(passwordSalt);
 

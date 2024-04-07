@@ -1,9 +1,14 @@
 ﻿using CMS.Contracts.Auth;
-using Core.Results;
 
 namespace CMS.Services.Interfaces;
 
 public interface IAuthService
 {
     Task<Result> Login(LoginViewModel model);
+
+    Task<Result> ForgetPassword(ForgetPasswordViewModel model);
+
+    Task<Result<string>> GetAccountByResetToken(string resetToken);
+
+    Task<Result> ResetPassword(ResetPasswordViewModel model);
 }

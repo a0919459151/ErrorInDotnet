@@ -1,6 +1,4 @@
-﻿using Core.EFCore.BaseEntities;
-using Core.EFCore.DBEntities;
-using Microsoft.EntityFrameworkCore;
+﻿using Microsoft.EntityFrameworkCore;
 using System.Linq.Expressions;
 
 namespace Core.EFCore;
@@ -11,7 +9,8 @@ public class AppDbContext : DbContext
     public DbSet<Admin> Admins { get; set; }
 
 
-    public AppDbContext(DbContextOptions<AppDbContext> options) : base(options)
+    public AppDbContext(DbContextOptions<AppDbContext> options) 
+        : base(options)
     {
     }
 
@@ -37,6 +36,7 @@ public class AppDbContext : DbContext
                 BinaryExpression compareExpression = Expression.MakeBinary(ExpressionType.Equal, isDeletedProperty, Expression.Constant(null));
                 var lambda = Expression.Lambda(compareExpression, parameter);
 
+                // Apply
                 modelBuilder.Entity(entityType.ClrType).HasQueryFilter(lambda);
             }
         }
