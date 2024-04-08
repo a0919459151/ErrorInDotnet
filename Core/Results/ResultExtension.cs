@@ -1,6 +1,4 @@
-﻿using Microsoft.AspNetCore.Http;
-
-namespace Core.Results;
+﻿namespace Core.Results;
 
 public static class CommonResultExtension
 {
@@ -8,14 +6,14 @@ public static class CommonResultExtension
     public static Result Success(this Result result)
     {
         result.IsSuccess = true;
-        result.Code = StatusCodes.Status200OK;
+        result.Code = CommonErrorCode.Success;
         result.Message = "Success";
         return result;
     }
     public static Result<T> Success<T>(this Result<T> result)
     {
         result.IsSuccess = true;
-        result.Code = StatusCodes.Status200OK;
+        result.Code = CommonErrorCode.Success;
         result.Message = "Success";
         return result;
     }
@@ -24,14 +22,14 @@ public static class CommonResultExtension
     public static Result BadRequest(this Result result, string message)
     {
         result.IsSuccess = false;
-        result.Code = StatusCodes.Status400BadRequest;
+        result.Code = CommonErrorCode.BadRequest;
         result.Message = message;
         return result;
     }
     public static Result<T> BadRequest<T>(this Result<T> result, string message)
     {
         result.IsSuccess = false;
-        result.Code = StatusCodes.Status400BadRequest;
+        result.Code = CommonErrorCode.BadRequest;
         result.Message = message;
         return result;
     }
@@ -40,14 +38,14 @@ public static class CommonResultExtension
     public static Result Unauthorized(this Result result, string message)
     {
         result.IsSuccess = false;
-        result.Code = StatusCodes.Status401Unauthorized;
+        result.Code = CommonErrorCode.Unauthorized;
         result.Message = message;
         return result;
     }
     public static Result<T> Unauthorized<T>(this Result<T> result, string message)
     {
         result.IsSuccess = false;
-        result.Code = StatusCodes.Status401Unauthorized;
+        result.Code = CommonErrorCode.Unauthorized;
         result.Message = message;
         return result;
     }
@@ -56,14 +54,14 @@ public static class CommonResultExtension
     public static Result Forbidden(this Result result, string message)
     {
         result.IsSuccess = false;
-        result.Code = StatusCodes.Status403Forbidden;
+        result.Code = CommonErrorCode.Forbidden;
         result.Message = message;
         return result;
     }
     public static Result<T> Forbidden<T>(this Result<T> result, string message)
     {
         result.IsSuccess = false;
-        result.Code = StatusCodes.Status403Forbidden;
+        result.Code = CommonErrorCode.Forbidden;
         result.Message = message;
         return result;
     }
@@ -72,14 +70,14 @@ public static class CommonResultExtension
     public static Result NotFound(this Result result, string message)
     {
         result.IsSuccess = false;
-        result.Code = StatusCodes.Status404NotFound;
+        result.Code = CommonErrorCode.NotFound;
         result.Message = message;
         return result;
     }
     public static Result<T> NotFound<T>(this Result<T> result, string message)
     {
         result.IsSuccess = false;
-        result.Code = StatusCodes.Status404NotFound;
+        result.Code = CommonErrorCode.NotFound;
         result.Message = message;
         return result;
     }
@@ -88,14 +86,14 @@ public static class CommonResultExtension
     public static Result ServerError(this Result result, string message)
     {
         result.IsSuccess = false;
-        result.Code = 500;
+        result.Code = CommonErrorCode.ServerError;
         result.Message = message;
         return result;
     }
     public static Result<T> ServerError<T>(this Result<T> result, string message)
     {
         result.IsSuccess = false;
-        result.Code = 500;
+        result.Code = CommonErrorCode.ServerError;
         result.Message = message;
         return result;
     }
@@ -103,8 +101,16 @@ public static class CommonResultExtension
 
 public static class CustomResultExtension
 {
-    // BadRequest method
-    public static Result Error(this Result result, int code, string message)
+    // BadRequest method,
+    // Need to define the custom error code in ErrorCode.cs
+    public static Result CustomError(this Result result, int code, string message)
+    {
+        result.IsSuccess = false;
+        result.Code = code;
+        result.Message = message;
+        return result;
+    }
+    public static Result<T> CustomError<T>(this Result<T> result, int code, string message)
     {
         result.IsSuccess = false;
         result.Code = code;

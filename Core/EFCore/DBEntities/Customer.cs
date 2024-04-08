@@ -1,6 +1,4 @@
-﻿using Core.EFCore.BaseEntities;
-using Microsoft.EntityFrameworkCore;
-using System.ComponentModel.DataAnnotations;
+﻿using System.ComponentModel.DataAnnotations;
 
 namespace Core.EFCore.DBEntities;
 
@@ -18,4 +16,11 @@ public class Customer : BaseEntity
     [StringLength(100)]
     [Comment("密碼")]
     public string Password { get; set; } = null!;
+
+    [StringLength(100)]
+    [Comment("刷新令牌")]
+    public string? RefreshToken { get; set; }
+
+    [Comment("刷新令牌到期時間")]
+    public DateTime? RefreshTokenExpireAt { get; set; }
 }

@@ -1,7 +1,6 @@
-using Core.Middlewares.ErrorHandler;
 using Microsoft.AspNetCore.Builder;
 
-namespace Middleware.Middlewares;
+namespace Core.Middlewares.ErrorHandler;
 
 public static class ErrorHandlerMiddlewareExtension
 {

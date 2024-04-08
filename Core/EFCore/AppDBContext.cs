@@ -1,5 +1,4 @@
-﻿using Microsoft.EntityFrameworkCore;
-using System.Linq.Expressions;
+﻿using System.Linq.Expressions;
 
 namespace Core.EFCore;
 
@@ -20,6 +19,9 @@ public class AppDbContext : DbContext
 
         // Soft delete query filter
         ApplySoftDeleteQueryFilters(modelBuilder);
+
+        // Apply configurations
+        modelBuilder.ApplyConfigurationsFromAssembly(typeof(AppDbContext).Assembly);
     }
 
     private void ApplySoftDeleteQueryFilters(ModelBuilder modelBuilder)

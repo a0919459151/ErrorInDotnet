@@ -21,6 +21,7 @@ public class MailSender
         // Get mail content
         var mailContent = GetResetPasswordMailContnent(resetPasswordUrl);
 
+        // Create mail
         var mail = new MimeMessage();
         mail.From.Add(MailboxAddress.Parse(_smtpOption.MailAddress));
         mail.To.Add(MailboxAddress.Parse(mailTo));
@@ -43,9 +44,9 @@ public class MailSender
     {
         var assembly = Assembly.GetExecutingAssembly();
         var resourcePath = assembly.GetManifestResourceNames()
-            .Single(str => str.EndsWith(resourceName));
+            .Single(str => str.EndsWith(resourceName)) ?? throw new Exception("Mail template resource not found");
 
-        using Stream stream = assembly.GetManifestResourceStream(resourcePath);
+        using Stream stream = assembly.GetManifestResourceStream(resourcePath) ?? throw new Exception("Mail template resource not found");
         using StreamReader reader = new StreamReader(stream, Encoding.UTF8);
         return reader.ReadToEnd();
     }

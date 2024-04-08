@@ -82,7 +82,7 @@ public class AuthController : Controller
             return RedirectToAction(nameof(Login));
         }
 
-        // bring account to view
+        // Bring account to view
         ViewBag.Account = accountResult.Data;
 
         var vm = new ResetPasswordViewModel()

@@ -1,11 +1,13 @@
+using Core.DI;
+using CMS.DI;
+
 var builder = WebApplication.CreateBuilder(args);
 
 builder.Services.AddControllersWithViews();
 builder.Services.AddHttpContextAccessor();
 builder.Services.AddCookieAuthentication();
-builder.Services.AddDbContext(builder.Configuration);
+builder.Services.AddDbContext();
 builder.Services.AddHelpers();
-builder.Services.AddOptions(builder.Configuration);
 builder.Services.AddServices();
 
 var app = builder.Build();

@@ -7,16 +7,18 @@ namespace Core.Helpers;
 
 public class HttpContextService
 {
-    private readonly HttpContext _httpContext;
+    private readonly IHttpContextAccessor _httpContextAccessor;
 
     public HttpContextService(IHttpContextAccessor httpContextAccessor)
     {
-        _httpContext =  httpContextAccessor.HttpContext ?? throw new Exception("HttpContext not found");
+        _httpContextAccessor = httpContextAccessor;
     }
 
-    // Login
-    public async Task Login(Admin admin, bool isPersistent)
+    // CookieLogin
+    public async Task CookieLogin(Admin admin, bool isPersistent)
     {
+        var httpContext = _httpContextAccessor.HttpContext ?? throw new ServerErrorException("HttpContext not found");
+
         List<Claim> claims = [
             new Claim(ClaimTypes.NameIdentifier, admin.Id.ToString()),
             new Claim(ClaimTypes.Name, admin.Account),
@@ -34,7 +36,7 @@ public class HttpContextService
             ExpiresUtc = isPersistent is not false ? dateTimeOffset : null,
         };
 
-        await _httpContext.SignInAsync(
+        await httpContext.SignInAsync(
             CookieAuthenticationDefaults.AuthenticationScheme,
             new ClaimsPrincipal(claimsIdentity),
             authProperties);
@@ -43,12 +45,11 @@ public class HttpContextService
     // GetCurrentUserId
     public int GetCurrentUserId()
     {
-        var userId = _httpContext.User.FindFirst(ClaimTypes.NameIdentifier)?.Value;
+        var httpContext = _httpContextAccessor.HttpContext 
+            ?? throw new ServerErrorException("HttpContext not found");
 
-        if (userId is null)
-        {
-            throw new Exception("User not found");
-        }
+        var userId = httpContext.User.FindFirst(ClaimTypes.NameIdentifier)?.Value 
+            ?? throw new AppException(CommonErrorCode.Unauthorized, "Claim nameid not found");
 
         return int.Parse(userId);
     }

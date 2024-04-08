@@ -1,35 +1,48 @@
-﻿using Core.EFCore;
-using Microsoft.EntityFrameworkCore;
-using System.Reflection;
+﻿using Microsoft.AspNetCore.Authentication.JwtBearer;
+using Microsoft.IdentityModel.Tokens;
+using System.Text;
 
-namespace Microsoft.Extensions.DependencyInjection;
+namespace Backend.DI;
 
 public static class DependencyInjection
 {
-    // Add dbconext
-    public static void AddDbContext(this IServiceCollection services, IConfiguration configuration)
+    // Add jwt authentication
+    public static void AddJwtAuthentication(this IServiceCollection services)
     {
-        var connectionString = configuration.GetConnectionString("DefaultConnection");
+        // Get secret key
+        var configuration = services.BuildServiceProvider().GetRequiredService<IConfiguration>();
+        var secretKey = configuration["JwtSettings:SecretKey"] ?? throw new Exception("Jwt secret key not found");
 
-        services.AddDbContext<AppDbContext>(options =>
-        {
-            options.UseSqlServer(connectionString);
-        });
+        services
+            .AddAuthentication(options =>
+            {
+                options.DefaultAuthenticateScheme = JwtBearerDefaults.AuthenticationScheme;
+                options.DefaultChallengeScheme = JwtBearerDefaults.AuthenticationScheme;
+            })
+            .AddJwtBearer(options =>
+            {
+                options.TokenValidationParameters = new TokenValidationParameters
+                {
+                    ValidateIssuerSigningKey = true,
+                    IssuerSigningKey = new SymmetricSecurityKey(Encoding.ASCII.GetBytes(secretKey)),
+                    ValidateIssuer = false,
+                    ValidateAudience = false
+                };
+            });
     }
 
-    // Add services to the ioc container with reflaection
-    public static void AddServices(this IServiceCollection services)
+    // Add all allow cors
+    public static void AddAllAllowCors(this IServiceCollection services)
     {
-        var assembly = Assembly.GetExecutingAssembly();
-        var types = assembly.GetTypes().Where(x => x.Namespace != null && x.Namespace.Contains("Services")).ToList();
-
-        foreach (var type in types)
+        services.AddCors(options =>
         {
-            var interfaceType = type.GetInterface($"I{type.Name}");
-            if (interfaceType != null)
+            options.AddPolicy("CorsPolicy", builder =>
             {
-                services.AddScoped(interfaceType, type);
-            }
-        }
+                builder.AllowAnyHeader()
+                    .AllowAnyMethod()
+                    .WithOrigins("http://localhost:5173")
+                    .AllowCredentials();
+            });
+        });
     }
 }

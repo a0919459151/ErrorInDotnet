@@ -10,15 +10,18 @@ public class AuthService : IAuthService
     private readonly AppDbContext _context;
     private readonly MailSender _mailSender;
     private readonly HttpContextService _httpContextService;
+    private readonly RandomService _randomService;
 
     public AuthService(
         AppDbContext context,
         MailSender mailSender,
-        HttpContextService httpContextService)
+        HttpContextService httpContextService,
+        RandomService randomService)
     {
         _context = context;
         _mailSender = mailSender;
         _httpContextService = httpContextService;
+        _randomService = randomService;
     }
 
     public async Task<Result> Login(LoginViewModel model)
@@ -43,8 +46,8 @@ public class AuthService : IAuthService
             return result.Unauthorized("Password is incorrect");
         }
 
-        // Login
-        await _httpContextService.Login(admin, model.IsRememberMe);
+        // CookieLogin
+        await _httpContextService.CookieLogin(admin, model.IsRememberMe);
 
         return result.Success();
     }
@@ -65,7 +68,7 @@ public class AuthService : IAuthService
         }
 
         // Generate token
-        string resetToken = GenerateToken();
+        string resetToken = _randomService.GenerateToken(32);
 
         // Update
         admin.ResetPasswordToken = resetToken;
@@ -79,13 +82,6 @@ public class AuthService : IAuthService
         await _mailSender.SendResetPasswordMail(admin.Account, resetPasswordUrl);
 
         return result.Success();
-    }
-
-    private static string GenerateToken()
-    {
-        var byteArr = new byte[32];
-        RandomNumberGenerator.Fill(byteArr);
-        return Convert.ToBase64String(byteArr);
     }
 
     public async Task<Result<string>> GetAccountByResetToken(string resetToken)

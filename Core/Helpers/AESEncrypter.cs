@@ -8,20 +8,19 @@ namespace Core.Helpers;
 /// </summary>
 public class AESEncrypter
 {
-    // dotnet 8 doc : https://docs.microsoft.com/en-us/dotnet/api/system.security.cryptography.aes?view=net-8.0
+    // dotnet 8 doc reference : https://docs.microsoft.com/en-us/dotnet/api/system.security.cryptography.aes?view=net-8.0
 
     // AES 512 alg key and iv
     private readonly byte[] _key = Encoding.UTF8.GetBytes("80808080808080808080808080808080");  // 32 bytes
     private readonly byte[] _iv = Encoding.UTF8.GetBytes("8080808080808080");  // 16 bytes
 
-    // Encrypt string
+    // AES encrypt
     public string Encrypt(string plainText)
     {
         var cipherText = EncryptStringToBytes(plainText, _key, _iv);
         return Convert.ToBase64String(cipherText);
     }
 
-    // Encrypt 
     private byte[] EncryptStringToBytes(string plainText, byte[] Key, byte[] IV)
     {
         // Check arguments
@@ -62,15 +61,14 @@ public class AESEncrypter
         return encrypted;
     }
 
-    // Decrypt string
+    // AES decrypt
     public string Decrypt(string cipherText)
     {
         var cipherBytes = Convert.FromBase64String(cipherText);
         return DecryptStringFromBytes(cipherBytes, _key, _iv);
     }
 
-    // Decrypt
-    static string DecryptStringFromBytes(byte[] cipherText, byte[] Key, byte[] IV)
+    private string DecryptStringFromBytes(byte[] cipherText, byte[] Key, byte[] IV)
     {
         // Check arguments
         if (cipherText == null || cipherText.Length <= 0)

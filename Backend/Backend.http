@@ -1,0 +1,29 @@
+@Backend_HostAddress = https://localhost:7021
+@AccessToken = Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJuYW1laWQiOiIxIiwibmJmIjoxNzEyNzM3MTIyLCJleHAiOjE3MTI3NDA3MjIsImlhdCI6MTcxMjczNzEyMn0.ksh4HZ6F1rZ7UOYdC13em1gYh5c6q4zFs_pF-Ief7Ck
+
+
+// Login
+
+POST {{Backend_HostAddress}}/api/auth/login
+Content-Type: application/json
+
+{
+  "account": "admin",
+  "password": "123qwe"
+}
+
+###
+
+// Get activities
+
+GET {{Backend_HostAddress}}/api/activity/GetActivities?ActivityType=1
+Authorization: {{AccessToken}}
+
+###
+
+// Logout
+
+POST {{Backend_HostAddress}}/api/auth/Logout
+Authorization: {{AccessToken}}
+
+###
