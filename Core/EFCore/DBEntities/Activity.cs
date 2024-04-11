@@ -10,7 +10,7 @@ public class Activity : BaseEntity
     public string ActivityName { get; set; } = null!;
 
     [Comment("活動類型")]
-    public ActivityType ActivityTypeId { get; set; }
+    public ActivityType ActivityType { get; set; }
 
 
     // 活動類別

@@ -7,6 +7,9 @@ public interface IActivityService
     // GetActivities
     Task<GetActivitiesResponseDto> GetActivities(GetActivitiesRequestDto request);
 
+    // GetActivitiesPagination
+    Task<GetActivitiesPaginationResponseDto> GetActivitiesPagination(GetActivitiesPaginationRequestDto request);
+
     // GetActivity
     Task<GetActivityResponseDto> GetActivity(int id);
 }

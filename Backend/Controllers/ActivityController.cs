@@ -5,7 +5,7 @@ using Microsoft.AspNetCore.Mvc;
 
 namespace Backend.Controllers;
 
-[Authorize]
+//[Authorize]
 [ApiController]
 [Route("api/[controller]")]
 public class ActivityController : Controller
@@ -24,6 +24,15 @@ public class ActivityController : Controller
         var response = await _activityService.GetActivities(request);
         return Ok(response);
     }
+
+    // Get all activities pagination
+    [HttpGet("GetActivitiesPagination")]
+    public async Task<IActionResult> GetActivitiesPagination([FromQuery] GetActivitiesPaginationRequestDto request)
+    {
+        var response = await _activityService.GetActivitiesPagination(request);
+        return Ok(response);
+    }
+
 
     // Get activity by id
     [HttpGet("GetActivity/{id}")]

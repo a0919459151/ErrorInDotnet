@@ -127,7 +127,7 @@ public class AuthService : IAuthService
         admin.Password = model.NewPassword;
         admin.ResetPasswordToken = null;
         admin.ResetPasswordExpireTime = null;
-        admin.UpdatedAt = DateTime.Now;
+        admin.UpdateAt = DateTime.Now;
 
         // Save
         await _context.SaveChangesAsync();

@@ -6,7 +6,8 @@ public class AppDbContext : DbContext
 {
     public DbSet<Customer> Customers { get; set; }
     public DbSet<Admin> Admins { get; set; }
-
+    public DbSet<Activity> Activities { get; set; }
+    public DbSet<ActivityCategory> ActivityCategories { get; set; }
 
     public AppDbContext(DbContextOptions<AppDbContext> options) 
         : base(options)
@@ -26,7 +27,8 @@ public class AppDbContext : DbContext
 
     private void ApplySoftDeleteQueryFilters(ModelBuilder modelBuilder)
     {
-        const string softDeletePropertyName = "DeletedAt";
+        // Get BaseEntity's soft delete property name
+        const string softDeletePropertyName = nameof(BaseEntity.DeleteAt);
 
         foreach (var entityType in modelBuilder.Model.GetEntityTypes())
         {

@@ -7,5 +7,9 @@ public class GetActivitiesRequestDto
 
 public class GetActivitiesResponseDto
 {
+    public int Id { get; set; }
 
+    public string ActivityName { get; set; } = null!;
+
+    public ActivityType ActivityType { get; set; }
 }

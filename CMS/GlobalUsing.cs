@@ -1,6 +1,9 @@
 ﻿/* EF Core */
 global using Microsoft.EntityFrameworkCore;
 
+/* X paged list */
+global using X.PagedList;
+
 /* Core proj */
 global using Core.Results;
 global using Core.Helpers;
