@@ -9,6 +9,7 @@ builder.Services.AddCookieAuthentication();
 builder.Services.AddDbContext();
 builder.Services.AddHelpers();
 builder.Services.AddServices();
+builder.Services.AddHangfire();
 
 var app = builder.Build();
 

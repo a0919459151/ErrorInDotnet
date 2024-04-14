@@ -1,7 +1,6 @@
 ﻿using CMS.Contracts.Auth;
 using CMS.Services.Interfaces;
-using Microsoft.EntityFrameworkCore;
-using System.Security.Cryptography;
+using Hangfire;
 
 namespace CMS.Services;
 
@@ -11,17 +10,20 @@ public class AuthService : IAuthService
     private readonly MailSender _mailSender;
     private readonly HttpContextService _httpContextService;
     private readonly RandomService _randomService;
+    private readonly IBackgroundJobClient _backgroundJobClient;
 
     public AuthService(
         AppDbContext context,
         MailSender mailSender,
         HttpContextService httpContextService,
-        RandomService randomService)
+        RandomService randomService,
+        IBackgroundJobClient backgroundJobClient)
     {
         _context = context;
         _mailSender = mailSender;
         _httpContextService = httpContextService;
         _randomService = randomService;
+        _backgroundJobClient = backgroundJobClient;
     }
 
     public async Task<Result> Login(LoginViewModel model)
@@ -77,9 +79,10 @@ public class AuthService : IAuthService
         // Save
         await _context.SaveChangesAsync();
 
-        // Send email
         var resetPasswordUrl = $"https://localhost:7100/Auth/ResetPassword?resetToken={resetToken}";
-        await _mailSender.SendResetPasswordMail(admin.Account, resetPasswordUrl);
+        
+        // Enqueue email sending job
+        _backgroundJobClient.Enqueue(() => _mailSender.SendResetPasswordMail(admin.Account, resetPasswordUrl));
 
         return result.Success();
     }

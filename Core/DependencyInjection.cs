@@ -1,4 +1,5 @@
-﻿using Microsoft.Extensions.Configuration;
+﻿using Hangfire;
+using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using System.Reflection;
 
@@ -52,5 +53,20 @@ public static class DependencyInjection
             if (interfaceType == null) continue;
             services.AddScoped(interfaceType, type);
         }
+    }
+
+    // Add hangfire
+    public static void AddHangfire(this IServiceCollection services)
+    {
+        // Get connection string
+        var configuration = services.BuildServiceProvider().GetRequiredService<IConfiguration>();
+        var connectionString = configuration.GetConnectionString("HangfireConnection");
+
+        services.AddHangfire(configuration => configuration
+            .SetDataCompatibilityLevel(CompatibilityLevel.Version_180)
+            .UseSimpleAssemblyNameTypeSerializer()
+            .UseRecommendedSerializerSettings()
+            .UseSqlServerStorage(connectionString));
+
     }
 }
