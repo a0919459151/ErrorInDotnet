@@ -12,15 +12,18 @@ public class AuthService : IAuthService
     private readonly JwtHelper _jwtHelper;
     private readonly AppDbContext _context;
     private readonly HttpContextService _httpContentService;
+    private readonly PasswordHasher _passwordHasher;
 
     public AuthService(
         JwtHelper jwtHelper,
         AppDbContext dbContext,
-        HttpContextService httpContentService)
+        HttpContextService httpContentService,
+        PasswordHasher passwordHasher)
     {
         _jwtHelper = jwtHelper;
         _context = dbContext;
         _httpContentService = httpContentService;
+        _passwordHasher = passwordHasher;
     }
 
     /// <summary>
@@ -41,6 +44,12 @@ public class AuthService : IAuthService
         if (customer is null)
         {
             throw new AppException(CommonErrorCode.NotFound, "Account not found");
+        }
+
+        // Verify password
+        if (!_passwordHasher.VerifyPasswordHash(request.Password, customer.PasswordHash, customer.PasswordSalt))
+        {
+            throw new AppException(CommonErrorCode.Unauthorized, "Password incorrect");
         }
 
         // JWT login

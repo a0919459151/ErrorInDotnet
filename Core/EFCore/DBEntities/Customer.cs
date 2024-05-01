@@ -14,8 +14,12 @@ public class Customer : BaseEntity
     public string Account { get; set; } = null!;
 
     [StringLength(100)]
-    [Comment("密碼")]
-    public string Password { get; set; } = null!;
+    [Comment("密碼 hash")]
+    public string PasswordHash { get; set; } = null!;
+
+    [StringLength(100)]
+    [Comment("密碼 salt")]
+    public string PasswordSalt { get; set; } = null!;
 
     [StringLength(100)]
     [Comment("刷新令牌")]

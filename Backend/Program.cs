@@ -39,15 +39,24 @@ async Task DataSeeding()
     var dbContext = scope.ServiceProvider.GetRequiredService<AppDbContext>();
     dbContext.Database.EnsureCreated();
 
-    var product = dbContext.Customers.Find(1);
+    var customerAdmin = dbContext.Customers
+        .Where(c => c.Name == "CustomerAdmin")
+        .FirstOrDefault();
 
     // Create
-    if (product is null)
+    if (customerAdmin is null)
     {
-        var newProduct = new Customer { Name = "Admin", Account = "admin", Password = "123qwe" };
+        var password = "123qwe";
 
-        await dbContext.Customers.AddAsync(newProduct);
+        // Get PasswordHasher
+        var passwordHasher = scope.ServiceProvider.GetRequiredService<PasswordHasher>();
 
+        // Create a password hash
+        var (passwordHash, passwordSalt) = passwordHasher.CreatePasswordHash(password);
+
+        var newAdmin = new Customer { Name = "Admin", Account = "admin", PasswordHash = passwordHash, PasswordSalt = passwordSalt };
+
+        await dbContext.Customers.AddAsync(newAdmin);
         await dbContext.SaveChangesAsync();
     }
 }
