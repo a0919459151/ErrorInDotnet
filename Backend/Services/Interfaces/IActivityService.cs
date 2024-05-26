@@ -5,10 +5,10 @@ namespace Backend.Services.Interfaces;
 public interface IActivityService
 {
     // GetActivities
-    Task<GetActivitiesResponseDto> GetActivities(GetActivitiesRequestDto request);
+    Task<List<GetActivitiesResponseDto>> GetActivities(GetActivitiesRequestDto request);
 
     // GetActivitiesPagination
-    Task<GetActivitiesPaginationResponseDto> GetActivitiesPagination(GetActivitiesPaginationRequestDto request);
+    Task<PaginationList<GetActivitiesPaginationResponseDto>> GetActivitiesPagination(GetActivitiesPaginationRequestDto request);
 
     // GetActivity
     Task<GetActivityResponseDto> GetActivity(int id);

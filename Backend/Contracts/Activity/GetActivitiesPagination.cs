@@ -7,11 +7,7 @@ public class GetActivitiesPaginationRequestDto : IPaginationQuery
     public int PageSize { get; set; } = PaginationConstants.DefaultPageSize;
 }
 
-public class GetActivitiesPaginationResponseDto : PagedListDto<ActivitiesPaginationDto>
-{
-}
-
-public class ActivitiesPaginationDto
+public class GetActivitiesPaginationResponseDto
 {
     public int Id { get; set; }
 

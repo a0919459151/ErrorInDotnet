@@ -5,17 +5,42 @@ namespace Backend.Services;
 
 public class ActivityCategoryService : IActivityCategoryService
 {
-    public async Task<GetActivityCategoriesResponseDto> GetActivityCategories(GetActivityCategoriesRequestDto request)
-    {
-        GetActivityCategoriesResponseDto response = new();
+    private readonly AppDbContext _context;
 
-        return response;
+    public ActivityCategoryService(AppDbContext context)
+    {
+        _context = context;
+    }
+
+    public async Task<List<GetActivityCategoriesResponseDto>> GetActivityCategories(GetActivityCategoriesRequestDto request)
+    {
+        var activityCategories = await _context.ActivityCategories
+            .Select(activityCategory => new GetActivityCategoriesResponseDto
+            {
+                Id = activityCategory.Id,
+                CategoryName = activityCategory.CategoryName,
+            })
+            .ToListAsync();
+
+        return activityCategories;
     }
 
     public async Task<GetActivityCategoryResponseDto> GetActivityCategory(int id)
     {
-        GetActivityCategoryResponseDto response = new();
+        var activityCategory = await _context.ActivityCategories
+            .Where(activityCategory => activityCategory.Id == id)
+            .Select(activityCategory => new GetActivityCategoryResponseDto
+            {
+                Id = activityCategory.Id,
+                CategoryName = activityCategory.CategoryName,
+            })
+            .FirstOrDefaultAsync();
 
-        return response;
+        if (activityCategory is null)
+        {
+            throw new AppException(CommonErrorCode.NotFound, "Activity category not found");
+        }
+
+        return activityCategory;
     }
 }

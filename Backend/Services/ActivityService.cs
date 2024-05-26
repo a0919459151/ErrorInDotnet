@@ -12,11 +12,9 @@ public class ActivityService : IActivityService
         _context = context;
     }
 
-    public async Task<GetActivitiesResponseDto> GetActivities(GetActivitiesRequestDto request)
+    public async Task<List<GetActivitiesResponseDto>> GetActivities(GetActivitiesRequestDto request)
     {
-        GetActivitiesResponseDto response = new();
-
-        var activity = await _context.Activities
+        var activities = await _context.Activities
             .Select(activity => new GetActivitiesResponseDto
             {
                 Id = activity.Id,
@@ -25,25 +23,21 @@ public class ActivityService : IActivityService
             })
             .ToListAsync();
 
-        return response;
+        return activities;
     }
 
-    public async Task<GetActivitiesPaginationResponseDto> GetActivitiesPagination(GetActivitiesPaginationRequestDto request)
+    public async Task<PaginationList<GetActivitiesPaginationResponseDto>> GetActivitiesPagination(GetActivitiesPaginationRequestDto request)
     {
-        GetActivitiesPaginationResponseDto response = new();
-
         var activities = await _context.Activities
-            .Select(activity => new ActivitiesPaginationDto
+            .Select(activity => new GetActivitiesPaginationResponseDto
             {
                 Id = activity.Id,
                 ActivityName = activity.ActivityName,
                 ActivityType = activity.ActivityType,
             })
-            .ToPagedListAsync(request.PageNumber, request.PageSize);
+            .ToPaginationListAsync(request.PageNumber, request.PageSize);
 
-        response.Map(activities);
-
-        return response;
+        return activities;
     }
 
     public async Task<GetActivityResponseDto> GetActivity(int id)
