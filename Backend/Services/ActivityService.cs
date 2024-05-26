@@ -50,6 +50,15 @@ public class ActivityService : IActivityService
     {
         GetActivityResponseDto response = new();
 
+        var activity = await _context.Activities
+            .Select(activity => new GetActivityResponseDto
+            {
+                Id = activity.Id,
+                ActivityName = activity.ActivityName,
+                ActivityType = activity.ActivityType,
+            })
+            .FirstOrDefaultAsync(activity => activity.Id == id);
+
         return response;
     }
 }

@@ -1,12 +1,10 @@
-﻿using Backend.Contracts.Common;
-
-namespace Backend.Contracts.Activity;
+﻿namespace Backend.Contracts.Activity;
 
 public class GetActivitiesPaginationRequestDto : IPaginationQuery
 {
-    public int PageNumber { get; set; }
+    public int PageNumber { get; set; } = PaginationConstants.DefaultPageNumber;
 
-    public int PageSize { get; set; }
+    public int PageSize { get; set; } = PaginationConstants.DefaultPageSize;
 }
 
 public class GetActivitiesPaginationResponseDto : PagedListDto<ActivitiesPaginationDto>

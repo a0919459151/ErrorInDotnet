@@ -1,8 +1,10 @@
-﻿namespace Backend.Contracts.Common;
+﻿using System.Collections;
 
-public class PagedListDto<T>
+namespace Core.CommonDtos.Pagination;
+
+public class PagedListDto<T> : IPagedList<T>
 {
-    public IEnumerable<T>? Data { get; set; }
+    public T this[int index] => throw new NotImplementedException();
 
     public int PageCount { get; protected set; }
     public int TotalItemCount { get; protected set; }
@@ -12,8 +14,23 @@ public class PagedListDto<T>
     public bool HasNextPage { get; protected set; }
     public bool IsFirstPage { get; protected set; }
     public bool IsLastPage { get; protected set; }
-    public int FirstItemOnPage { get; protected set; }
-    public int LastItemOnPage { get; protected set; }
+    public IEnumerable<T>? Data { get; set; }
+
+    public int FirstItemOnPage => throw new NotImplementedException();
+
+    public int LastItemOnPage => throw new NotImplementedException();
+
+    public int Count => throw new NotImplementedException();
+
+    public IEnumerator<T> GetEnumerator()
+    {
+        throw new NotImplementedException();
+    }
+
+    public PagedListMetaData GetMetaData()
+    {
+        throw new NotImplementedException();
+    }
 
     // Map IPagedList
     public void Map(IPagedList<T> pagedList)
@@ -27,7 +44,10 @@ public class PagedListDto<T>
         HasNextPage = pagedList.HasNextPage;
         IsFirstPage = pagedList.IsFirstPage;
         IsLastPage = pagedList.IsLastPage;
-        FirstItemOnPage = pagedList.FirstItemOnPage;
-        LastItemOnPage = pagedList.LastItemOnPage;
+    }
+
+    IEnumerator IEnumerable.GetEnumerator()
+    {
+        throw new NotImplementedException();
     }
 }

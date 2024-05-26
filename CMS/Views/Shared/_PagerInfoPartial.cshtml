@@ -1,0 +1,6 @@
+﻿@inject PagerHelper _pagerhelper
+@model IPagedList?
+
+<p>
+    @_pagerhelper.GetPagerInfo(Model)
+</p>

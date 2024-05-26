@@ -28,8 +28,6 @@ public class AuthService : IAuthService
 
     public async Task<Result> Login(LoginViewModel model)
     {
-        Result result = new();
-
         // Query
         var admin = await _context.Admins
             .AsNoTracking()
@@ -39,25 +37,23 @@ public class AuthService : IAuthService
         // Not found
         if (admin is null)
         {
-            return result.NotFound("Account not found");
+            return Result.NotFound("Account not found");
         }
 
         // Verify password
         if (model.Password != admin.Password)
         {
-            return result.Unauthorized("Password is incorrect");
+            return Result.Unauthorized("Password is incorrect");
         }
 
         // CookieLogin
         await _httpContextService.CookieLogin(admin, model.IsRememberMe);
 
-        return result.Success();
+        return Result.Success();
     }
 
     public async Task<Result> ForgetPassword(ForgetPasswordViewModel model)
     {
-        Result result = new();
-
         // Query
         var admin = await _context.Admins
             .Where(a => a.Account == model.Account)
@@ -66,7 +62,7 @@ public class AuthService : IAuthService
         // Not found
         if (admin is null)
         {
-            return result.NotFound("Account not found");
+            return Result.NotFound("Account not found");
         }
 
         // Generate token
@@ -84,31 +80,25 @@ public class AuthService : IAuthService
         // Enqueue email sending job
         _backgroundJobClient.Enqueue(() => _mailSender.SendResetPasswordMail(admin.Account, resetPasswordUrl));
 
-        return result.Success();
+        return Result.Success();
     }
 
-    public async Task<Result<string>> GetAccountByResetToken(string resetToken)
+    public async Task<Result> GetAccountByResetToken(string resetToken)
     {
-        Result<string> result = new();
-
         var admin = await _context.Admins
             .Where(a => a.ResetPasswordToken == resetToken)
             .FirstOrDefaultAsync();
 
         if (admin is null)
         {
-            return result.NotFound("Token not found");
+            return Result.NotFound("Token not found");
         }
 
-        result.Data = admin.Account;
-
-        return result.Success();
+        return Result.Success(admin.Account);
     }
 
     public async Task<Result> ResetPassword(ResetPasswordViewModel model)
     {
-        Result result = new();
-
         // Query
         var admin = await _context.Admins
             .Where(a => a.ResetPasswordToken == model.ResetPasswordToken)
@@ -117,13 +107,13 @@ public class AuthService : IAuthService
         // Not found
         if (admin is null)
         {
-            return result.NotFound("Token not found");
+            return Result.NotFound("Token not found");
         }
 
         // Check if expired
         if (admin.ResetPasswordExpireTime.IsBefore(DateTime.Now))
         {
-            return result.BadRequest("Token expired");
+            return Result.BadRequest("Token expired");
         }
 
         // Reset password
@@ -135,6 +125,6 @@ public class AuthService : IAuthService
         // Save
         await _context.SaveChangesAsync();
 
-        return result.Success();
+        return Result.Success();
     }
 }

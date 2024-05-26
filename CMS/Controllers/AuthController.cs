@@ -10,15 +10,15 @@ namespace CMS.Controllers;
 [AllowAnonymous]
 public class AuthController : Controller
 {
-    private readonly ToasterHelper _toastorHelper;
+    private readonly AlertHelper _alertHelper;
     private readonly IAuthService _authService;
 
     public AuthController(
-        ToasterHelper toastorHelper,
+        AlertHelper alertHelper,
         IAuthService authService)
     {
         _authService = authService;
-        _toastorHelper = toastorHelper;
+        _alertHelper = alertHelper;
     }
 
     // Login page
@@ -36,7 +36,7 @@ public class AuthController : Controller
 
         if (!result.IsSuccess)
         {
-            _toastorHelper.Error(result.Message);
+            _alertHelper.Error(result.Message);
             return View(model);
         }
 
@@ -58,7 +58,7 @@ public class AuthController : Controller
 
         if (!result.IsSuccess)
         {
-            _toastorHelper.Error(result.Message);
+            _alertHelper.Error(result.Message);
             return View(model);
         }
 
@@ -78,12 +78,12 @@ public class AuthController : Controller
 
         if (!accountResult.IsSuccess)
         {
-            _toastorHelper.Error(accountResult.Message);
+            _alertHelper.Error(accountResult.Message);
             return RedirectToAction(nameof(Login));
         }
 
         // Bring account to view
-        ViewBag.Account = accountResult.Data;
+        ViewBag.Account = accountResult.Value;
 
         var vm = new ResetPasswordViewModel()
         {
@@ -102,11 +102,11 @@ public class AuthController : Controller
 
         if (!result.IsSuccess)
         {
-            _toastorHelper.Error(result.Message);
+            _alertHelper.Error(result.Message);
             return View(model);
         }
 
-        _toastorHelper.Success("Password reset successfully");
+        _alertHelper.Success("Password reset successfully");
         return RedirectToAction(nameof(Login));
     }
 

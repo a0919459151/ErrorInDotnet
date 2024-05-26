@@ -31,7 +31,8 @@ public static class DependencyInjection
         services.AddSingleton<PasswordHasher>();
         services.AddSingleton<MailSender>();
         services.AddSingleton<RandomService>();
-        services.AddSingleton<ToasterHelper>();
+        services.AddSingleton<AlertHelper>();
+        services.AddScoped<PagerHelper>();
 
         services.Configure<SMTPOption>(configuration.GetSection(SMTPOption.SMTP));
     }

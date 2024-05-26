@@ -1,6 +1,5 @@
 ﻿using Backend.Contracts.Activity;
 using Backend.Services.Interfaces;
-using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
 namespace Backend.Controllers;
@@ -32,7 +31,6 @@ public class ActivityController : Controller
         var response = await _activityService.GetActivitiesPagination(request);
         return Ok(response);
     }
-
 
     // Get activity by id
     [HttpGet("GetActivity/{id}")]

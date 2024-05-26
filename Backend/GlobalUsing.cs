@@ -3,6 +3,7 @@ global using Microsoft.EntityFrameworkCore;
 
 /* X paged list */
 global using X.PagedList;
+global using Core.CommonDtos.Pagination;
 
 /* Core proj */
 global using Core.Results;

@@ -8,7 +8,7 @@ public interface IAuthService
 
     Task<Result> ForgetPassword(ForgetPasswordViewModel model);
 
-    Task<Result<string>> GetAccountByResetToken(string resetToken);
+    Task<Result> GetAccountByResetToken(string resetToken);
 
     Task<Result> ResetPassword(ResetPasswordViewModel model);
 }

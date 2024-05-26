@@ -1,9 +1,12 @@
 using Core.DI;
 using CMS.DI;
+using Microsoft.AspNetCore.Mvc.Infrastructure;
 
 var builder = WebApplication.CreateBuilder(args);
 
 builder.Services.AddControllersWithViews();
+builder.Services.AddHttpContextAccessor();
+builder.Services.AddSingleton<IActionContextAccessor, ActionContextAccessor>();
 builder.Services.AddHttpContextAccessor();
 builder.Services.AddCookieAuthentication();
 builder.Services.AddDbContext();

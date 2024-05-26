@@ -3,12 +3,12 @@ using Microsoft.AspNetCore.Mvc.ViewFeatures;
 
 namespace Core.Helpers
 {
-    public class ToasterHelper
+    public class AlertHelper
     {
         private readonly ITempDataDictionaryFactory _tempDataDictionaryFactory;
         private readonly IHttpContextAccessor _httpContextAccessor;
 
-        public ToasterHelper(
+        public AlertHelper(
             ITempDataDictionaryFactory tempDataDictionaryFactory,
             IHttpContextAccessor httpContextAccessor)
         {

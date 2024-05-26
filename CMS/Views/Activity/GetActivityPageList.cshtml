@@ -1,0 +1,67 @@
+﻿@inject PagerHelper _pagerHelper
+@model CMS.Contracts.Activiy.GetActivityPageListViewModel;
+
+@{
+    ViewBag.Title = "Activity Page List";
+
+    var pager = _pagerHelper.CreatePager(Model.Activities, Model.Query);
+}
+
+<div>
+    <div class="d-flex align-items-center justify-content-between">
+        <div>
+            <h2>Activity List</h2>
+        </div>
+        <div>
+            <a class="btn btn-primary" asp-action="CreateOrUpdateActivity" asp-controller="Activity">新增活動</a>
+        </div>
+    </div>
+
+    <table class="table">
+        <tr>
+            <th>#</th>
+            <th>活動ID</th>
+            <th>活動名稱</th>
+            <th>活動類型</th>
+            <th>操作</th>
+        </tr>
+        @{
+            var index = 1;
+            foreach (var activity in Model.Activities)
+            {
+                <tr>
+                    <td>@index</td>
+                    <td>@activity.Id</td>
+                    <td>@activity.ActivityName</td>
+                    <td>@activity.ActivityType.GetDescription()</td>
+                    <td>
+                        <div class="d-flex">
+                            <a class="btn btn-sm btn-info" asp-action="CreateOrUpdateActivity" asp-controller="Activity" asp-route-id="@activity.Id">編輯</a>
+
+                            <form method="post" asp-action="DeleteActivity" asp-controller="Activity" asp-route-id="@activity.Id">
+                                <button type="submit" class="btn btn-sm btn-danger">刪除</button>
+                            </form>
+                        </div>
+
+                    </td>
+                </tr>
+                index++;
+            }
+        }
+    </table>
+
+    <div>
+        @pager
+        <partial name="_PagerInfoPartial" model="@Model.Activities" />
+    </div>
+</div>
+
+@section scripts {
+    <script>
+        $(function () {
+            $('form').submit(function () {
+                return confirm('是否要刪除該筆活動?');
+            });
+        });
+    </script>
+}

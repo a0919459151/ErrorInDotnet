@@ -1,4 +1,4 @@
-﻿namespace Backend.Contracts.Common;
+﻿namespace Core.CommonDtos.Pagination;
 
 public interface IPaginationQuery
 {

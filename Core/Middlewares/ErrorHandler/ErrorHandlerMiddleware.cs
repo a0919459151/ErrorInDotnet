@@ -21,9 +21,12 @@ public class ErrorHandlerMiddleware
         {
             _ = ex switch
             {
-                AppException appException => ExceptionHandler.HandleAppException(context, appException),  // Handle the known bad request exception
-                ServerErrorException serverErrorException => ExceptionHandler.HandleServerErrorException(context, serverErrorException),  // Handel the known server error exception
-                _ => ExceptionHandler.HandleServerErrorException(context, ex)  // Handle the unknown exception
+                // Handle the known bad request exception
+                AppException appException => ExceptionHandler.HandleAppException(context, appException),
+                // Handel the known server error exception
+                ServerErrorException serverErrorException => ExceptionHandler.HandleServerErrorException(context, serverErrorException),
+                // Handle the unknown exception
+                _ => ExceptionHandler.HandleServerErrorException(context, ex)
             };
         }
     }

@@ -1,0 +1,46 @@
+﻿@model CMS.Contracts.Activiy.CreateOrUpdateActivityViewModel;
+
+@{
+    var isCreate = Model.Id is null;
+    var isUpdate = !isCreate;
+
+    ViewBag.Title = isCreate
+        ? "Create Activity"
+        : "Update Activity";
+
+    var titleText = isCreate
+        ? "Create Activity"
+        : "Update Activity";
+
+    var buttonText = isCreate
+        ? "Create"
+        : "Update";
+
+    // ActivityType select
+    var activityTypeSelectList = Html.GetEnumSelectList<ActivityType>()
+        .Prepend(new SelectListItem { Value = "", Text = "請選擇" });
+}
+
+<h2>@titleText</h2>
+
+<form method="post" asp-action="CreateOrUpdateActivity" asp-controller="Activity">
+
+    <div class="col-4">
+        <div class="form-group">
+            <label asp-for="ActivityName"></label>
+            <input asp-for="ActivityName" class="form-control" />
+        </div>
+
+        <div class="form-group">
+            <label asp-for="ActivityType"></label>
+            <select asp-for="ActivityType" class="form-control" asp-items="activityTypeSelectList"></select>
+        </div>
+
+        <div class="form-group">
+            <button type="submit" class="btn btn-primary">@buttonText</button>
+        </div>
+
+    </div>
+
+</form>
+
